@@ -100,16 +100,18 @@
     </main>
 
     <!-- Chatbot Widget -->
-    <div id="chatbot-widget" class="chatbot-widget chatbot-hidden" aria-live="polite">
-        <div class="chatbot-header">
-            <span>Asistente Nave</span>
-            <button class="chatbot-toggle" type="button" aria-expanded="true">–</button>
-        </div>
-        <div class="chatbot-messages" id="chatbot-messages"></div>
-        <form class="chatbot-input" id="chatbot-form">
-            <input type="text" id="chatbot-text" placeholder="Escribí tu mensaje…" autocomplete="off" required>
-            <button type="submit">Enviar</button>
-        </form>
+    <div id="chatbot-widget" class="chatbot-hidden">
+        <script
+          src="https://cdn.jsdelivr.net/gh/debmedia/numiajb-widget@1.0.11/dist/build/static/js/bundle.min.js">
+        </script>
+
+        <journey-builder-chat
+            window_title="Nave - Agente FAQs"
+            flow_id="75e9329b-d7bb-4497-8e95-43641bef94f8"
+            host_url="https://api.journeybuilder.numia.co"
+            api_key="sk-IkUi6pYmvGJ3nWDhYCKfZVrRxnT3QsIAfQHBLu6SFMw"
+            chat_position="top-right">
+        </journey-builder-chat>
     </div>
 
     <!-- Login Modal -->
@@ -143,92 +145,16 @@
     </div>
 
     <style>
-        .chatbot-widget {
+        #chatbot-widget {
             position: fixed;
-            right: 16px;
-            bottom: 16px;
-            width: 320px;
-            max-width: calc(100vw - 32px);
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-            font-family: inherit;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            left: 16px;
+            bottom: 24px;
             z-index: 9999;
         }
-        .chatbot-header {
-            background: #6B46C1;
-            color: #ffffff;
-            padding: 10px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-        .chatbot-toggle {
-            background: transparent;
-            border: none;
-            color: inherit;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        .chatbot-messages {
-            padding: 12px;
-            height: 240px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #f8fafc;
-        }
-        .chatbot-message {
-            padding: 8px 10px;
-            border-radius: 10px;
-            line-height: 1.35;
-            max-width: 85%;
-            font-size: 14px;
-        }
-        .chatbot-message.user {
-            align-self: flex-end;
-            background: #6B46C1;
-            color: #ffffff;
-        }
-        .chatbot-message.bot {
-            align-self: flex-start;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            color: #1f2937;
-        }
-        .chatbot-input {
-            display: flex;
-            gap: 8px;
-            padding: 10px 12px;
-            background: #ffffff;
-            border-top: 1px solid #e2e8f0;
-        }
-        .chatbot-input input {
-            flex: 1;
-            border: 1px solid #cbd5f5;
-            border-radius: 8px;
-            padding: 8px 10px;
-            font-size: 14px;
-        }
-        .chatbot-input button {
-            background: #6B46C1;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 12px;
-            cursor: pointer;
+        #chatbot-widget journey-builder-chat {
+            display: block;
         }
         .chatbot-hidden {
-            height: 0;
-        }
-        .chatbot-hidden .chatbot-messages,
-        .chatbot-hidden .chatbot-input {
             display: none;
         }
         .hero-landing-image {
@@ -351,10 +277,6 @@
 
     <script>
         const chatbotWidget = document.getElementById('chatbot-widget');
-        const chatbotToggle = chatbotWidget.querySelector('.chatbot-toggle');
-        const chatbotMessages = document.getElementById('chatbot-messages');
-        const chatbotForm = document.getElementById('chatbot-form');
-        const chatbotText = document.getElementById('chatbot-text');
         const loginButton = document.getElementById('login-button');
         const loginModal = document.getElementById('login-modal');
         const loginClose = document.getElementById('login-close');
@@ -365,11 +287,6 @@
         const loginSuccessModal = document.getElementById('login-success-modal');
         const loginSuccessClose = document.getElementById('login-success-close');
         const loginSuccessOk = document.getElementById('login-success-ok');
-
-        const apiKey = window.LANGFLOW_API_KEY;
-        if (!apiKey) {
-            console.warn('LANGFLOW_API_KEY no está definido en window.LANGFLOW_API_KEY');
-        }
 
         const sessionId = localStorage.getItem('chatbot_session_id') || `user_${Date.now()}`;
         localStorage.setItem('chatbot_session_id', sessionId);
@@ -393,20 +310,6 @@
 
         setLoggedIn(false);
         updateWidgetVisibility();
-
-        const addMessage = (text, type) => {
-            const message = document.createElement('div');
-            message.className = `chatbot-message ${type}`;
-            message.textContent = text;
-            chatbotMessages.appendChild(message);
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-        };
-
-        chatbotToggle.addEventListener('click', () => {
-            const isHidden = chatbotWidget.classList.toggle('chatbot-hidden');
-            chatbotToggle.textContent = isHidden ? '+' : '–';
-            chatbotToggle.setAttribute('aria-expanded', String(!isHidden));
-        });
 
         loginButton.addEventListener('click', () => {
             loginError.textContent = '';
@@ -460,40 +363,6 @@
             loginModal.setAttribute('aria-hidden', 'true');
             loginSuccessModal.classList.add('is-open');
             loginSuccessModal.setAttribute('aria-hidden', 'false');
-        });
-
-        chatbotForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const text = chatbotText.value.trim();
-            if (!text) return;
-
-            addMessage(text, 'user');
-            chatbotText.value = '';
-
-            try {
-                const payload = {
-                    input_value: text,
-                    output_type: 'chat',
-                    input_type: 'chat',
-                    session_id: sessionId
-                };
-
-                const response = await fetch('https://journeybuilder.numia.co/api/v1/run/75e9329b-d7bb-4497-8e95-43641bef94f8', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': apiKey
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                const data = await response.json();
-                const messageText = data?.outputs?.[0]?.outputs?.[0]?.results?.message?.text || 'No pude responder en este momento.';
-                addMessage(messageText, 'bot');
-            } catch (error) {
-                console.error(error);
-                addMessage('Hubo un error al enviar el mensaje.', 'bot');
-            }
         });
     </script>
 </body>
