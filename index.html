@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nave - Cobrás con Nave, tu negocio vuela</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <img src="Nave.jpg" alt="Nave Logo">
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item">Cobros</a>
+                <span class="nav-separator">|</span>
+                <a href="#" class="nav-item">Beneficios</a>
+            </nav>
+            <div class="header-buttons">
+                <button class="btn-outline">Espacio Nave</button>
+                <button class="btn-primary">Entrar a Nave</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="hero-card">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">Cobrás con Nave, tu negocio vuela</h1>
+                        <p class="hero-description">Un ecosistema que acompaña desde el despegue, hasta el vuelo y el aterrizaje seguro.</p>
+                        <button class="btn-hero">Soy Galicia y quiero tener Nave</button>
+                    </div>
+                    <div class="hero-image">
+                        <div class="hero-image-wrapper">
+                            <div class="hero-background-logo"></div>
+                            <div class="hero-person-placeholder">
+                                <!-- Imagen de la mujer - usar placeholder o imagen real -->
+                                <div class="person-image"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Carousel Controls -->
+            <div class="carousel-controls">
+                <button class="carousel-arrow left">←</button>
+                <div class="carousel-dots">
+                    <span class="dot"></span>
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                </div>
+                <button class="carousel-arrow right">→</button>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="features-title">Te damos la bienvenida al vuelo de tu negocio</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 8C20.5523 8 21 8.44772 21 9V19C21 19.5523 20.5523 20 20 20C19.4477 20 19 19.5523 19 19V9C19 8.44772 19.4477 8 20 8Z" fill="#6B46C1"/>
+                            <path d="M20 24C20.5523 24 21 24.4477 21 25V31C21 31.5523 20.5523 32 20 32C19.4477 32 19 31.5523 19 31V25C19 24.4477 19.4477 24 20 24Z" fill="#6B46C1"/>
+                            <circle cx="20" cy="20" r="12" stroke="#6B46C1" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Viajá liviano de</h3>
+                    <p class="feature-text">Comisiones competitivas que te permiten crecer sin preocupaciones.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="10" y="10" width="20" height="20" rx="2" stroke="#6B46C1" stroke-width="2" fill="none"/>
+                            <path d="M15 20L18 23L25 16" stroke="#6B46C1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Promociones que se</h3>
+                    <p class="feature-text">Ofertas exclusivas para hacer crecer tu negocio día a día.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="6" y="26" width="6" height="8" fill="#6B46C1"/>
+                            <rect x="17" y="18" width="6" height="16" fill="#6B46C1"/>
+                            <rect x="28" y="12" width="6" height="22" fill="#6B46C1"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Todo el control desde la</h3>
+                    <p class="feature-text">Panel intuitivo para gestionar todos tus cobros en un solo lugar.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Chatbot Widget -->
+    <div id="chatbot-widget" class="chatbot-widget" aria-live="polite">
+        <div class="chatbot-header">
+            <span>Asistente Nave</span>
+            <button class="chatbot-toggle" type="button" aria-expanded="true">–</button>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages"></div>
+        <form class="chatbot-input" id="chatbot-form">
+            <input type="text" id="chatbot-text" placeholder="Escribí tu mensaje…" autocomplete="off" required>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <style>
+        .chatbot-widget {
+            position: fixed;
+            right: 16px;
+            bottom: 16px;
+            width: 320px;
+            max-width: calc(100vw - 32px);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            font-family: inherit;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999;
+        }
+        .chatbot-header {
+            background: #6B46C1;
+            color: #ffffff;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .chatbot-toggle {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .chatbot-messages {
+            padding: 12px;
+            height: 240px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #f8fafc;
+        }
+        .chatbot-message {
+            padding: 8px 10px;
+            border-radius: 10px;
+            line-height: 1.35;
+            max-width: 85%;
+            font-size: 14px;
+        }
+        .chatbot-message.user {
+            align-self: flex-end;
+            background: #6B46C1;
+            color: #ffffff;
+        }
+        .chatbot-message.bot {
+            align-self: flex-start;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #1f2937;
+        }
+        .chatbot-input {
+            display: flex;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+        }
+        .chatbot-input input {
+            flex: 1;
+            border: 1px solid #cbd5f5;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+        .chatbot-input button {
+            background: #6B46C1;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .chatbot-hidden {
+            height: 0;
+        }
+        .chatbot-hidden .chatbot-messages,
+        .chatbot-hidden .chatbot-input {
+            display: none;
+        }
+    </style>
+
+    <script>
+        const chatbotWidget = document.getElementById('chatbot-widget');
+        const chatbotToggle = chatbotWidget.querySelector('.chatbot-toggle');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotForm = document.getElementById('chatbot-form');
+        const chatbotText = document.getElementById('chatbot-text');
+
+        const apiKey = window.LANGFLOW_API_KEY;
+        if (!apiKey) {
+            console.warn('LANGFLOW_API_KEY no está definido en window.LANGFLOW_API_KEY');
+        }
+
+        const sessionId = localStorage.getItem('chatbot_session_id') || `user_${Date.now()}`;
+        localStorage.setItem('chatbot_session_id', sessionId);
+
+        const addMessage = (text, type) => {
+            const message = document.createElement('div');
+            message.className = `chatbot-message ${type}`;
+            message.textContent = text;
+            chatbotMessages.appendChild(message);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        };
+
+        chatbotToggle.addEventListener('click', () => {
+            const isHidden = chatbotWidget.classList.toggle('chatbot-hidden');
+            chatbotToggle.textContent = isHidden ? '+' : '–';
+            chatbotToggle.setAttribute('aria-expanded', String(!isHidden));
+        });
+
+        chatbotForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const text = chatbotText.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            chatbotText.value = '';
+
+            try {
+                const payload = {
+                    input_value: text,
+                    output_type: 'chat',
+                    input_type: 'chat',
+                    session_id: sessionId
+                };
+
+                const response = await fetch('https://journeybuilder.numia.co/api/v1/run/75e9329b-d7bb-4497-8e95-43641bef94f8', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                const messageText = data?.outputs?.[0]?.outputs?.[0]?.results?.message?.text || 'No pude responder en este momento.';
+                addMessage(messageText, 'bot');
+            } catch (error) {
+                console.error(error);
+                addMessage('Hubo un error al enviar el mensaje.', 'bot');
+            }
+        });
+    </script>
+</body>
+</html>
