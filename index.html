@@ -19,6 +19,7 @@
                 <a href="#" class="nav-item">Beneficios</a>
             </nav>
             <div class="header-buttons">
+                <button class="btn-outline" id="login-button">Login</button>
                 <button class="btn-outline">Espacio Nave</button>
                 <button class="btn-primary">Entrar a Nave</button>
             </div>
@@ -100,7 +101,7 @@
     </main>
 
     <!-- Chatbot Widget -->
-    <div id="chatbot-widget" class="chatbot-widget" aria-live="polite">
+    <div id="chatbot-widget" class="chatbot-widget chatbot-hidden" aria-live="polite">
         <div class="chatbot-header">
             <span>Asistente Nave</span>
             <button class="chatbot-toggle" type="button" aria-expanded="true">–</button>
@@ -110,6 +111,24 @@
             <input type="text" id="chatbot-text" placeholder="Escribí tu mensaje…" autocomplete="off" required>
             <button type="submit">Enviar</button>
         </form>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="login-modal" id="login-modal" aria-hidden="true">
+        <div class="login-card">
+            <div class="login-header">
+                <h3>Iniciar sesión</h3>
+                <button type="button" class="login-close" id="login-close">×</button>
+            </div>
+            <form id="login-form">
+                <label class="login-label" for="login-email">Email</label>
+                <input id="login-email" type="email" required>
+                <label class="login-label" for="login-password">Contraseña</label>
+                <input id="login-password" type="password" required>
+                <div class="login-error" id="login-error"></div>
+                <button type="submit" class="login-submit">Ingresar</button>
+            </form>
+        </div>
     </div>
 
     <style>
@@ -201,6 +220,70 @@
         .chatbot-hidden .chatbot-input {
             display: none;
         }
+        .login-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        .login-modal.is-open {
+            display: flex;
+        }
+        .login-card {
+            width: 320px;
+            max-width: calc(100vw - 32px);
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+        .login-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .login-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .login-close {
+            background: transparent;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+        }
+        .login-label {
+            display: block;
+            font-size: 13px;
+            margin: 8px 0 4px;
+        }
+        #login-form input {
+            width: 100%;
+            border: 1px solid #cbd5f5;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+        .login-submit {
+            width: 100%;
+            margin-top: 12px;
+            background: #6B46C1;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .login-error {
+            color: #b91c1c;
+            font-size: 12px;
+            margin-top: 6px;
+            min-height: 16px;
+        }
     </style>
 
     <script>
@@ -209,6 +292,13 @@
         const chatbotMessages = document.getElementById('chatbot-messages');
         const chatbotForm = document.getElementById('chatbot-form');
         const chatbotText = document.getElementById('chatbot-text');
+        const loginButton = document.getElementById('login-button');
+        const loginModal = document.getElementById('login-modal');
+        const loginClose = document.getElementById('login-close');
+        const loginForm = document.getElementById('login-form');
+        const loginEmail = document.getElementById('login-email');
+        const loginPassword = document.getElementById('login-password');
+        const loginError = document.getElementById('login-error');
 
         const apiKey = window.LANGFLOW_API_KEY;
         if (!apiKey) {
@@ -217,6 +307,23 @@
 
         const sessionId = localStorage.getItem('chatbot_session_id') || `user_${Date.now()}`;
         localStorage.setItem('chatbot_session_id', sessionId);
+
+        const allowedUsers = [
+            { email: 'mfcanto@numia.co', password: 'MF$Canto2025' },
+            { email: 'ecorona@numia.co', password: 'E$Corona2025' }
+        ];
+
+        const isLoggedIn = () => localStorage.getItem('chatbot_logged_in') === 'true';
+        const setLoggedIn = (value) => localStorage.setItem('chatbot_logged_in', value ? 'true' : 'false');
+        const updateWidgetVisibility = () => {
+            if (isLoggedIn()) {
+                chatbotWidget.classList.remove('chatbot-hidden');
+            } else {
+                chatbotWidget.classList.add('chatbot-hidden');
+            }
+        };
+
+        updateWidgetVisibility();
 
         const addMessage = (text, type) => {
             const message = document.createElement('div');
@@ -230,6 +337,45 @@
             const isHidden = chatbotWidget.classList.toggle('chatbot-hidden');
             chatbotToggle.textContent = isHidden ? '+' : '–';
             chatbotToggle.setAttribute('aria-expanded', String(!isHidden));
+        });
+
+        loginButton.addEventListener('click', () => {
+            loginError.textContent = '';
+            loginEmail.value = '';
+            loginPassword.value = '';
+            loginModal.classList.add('is-open');
+            loginModal.setAttribute('aria-hidden', 'false');
+        });
+
+        loginClose.addEventListener('click', () => {
+            loginModal.classList.remove('is-open');
+            loginModal.setAttribute('aria-hidden', 'true');
+        });
+
+        loginModal.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                loginModal.classList.remove('is-open');
+                loginModal.setAttribute('aria-hidden', 'true');
+            }
+        });
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const email = loginEmail.value.trim().toLowerCase();
+            const password = loginPassword.value;
+            const isAllowed = allowedUsers.some(
+                (user) => user.email === email && user.password === password
+            );
+
+            if (!isAllowed) {
+                loginError.textContent = 'Credenciales inválidas.';
+                return;
+            }
+
+            setLoggedIn(true);
+            updateWidgetVisibility();
+            loginModal.classList.remove('is-open');
+            loginModal.setAttribute('aria-hidden', 'true');
         });
 
         chatbotForm.addEventListener('submit', async (event) => {
